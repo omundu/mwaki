@@ -38,6 +38,9 @@ GEM
       method_source (~> 0.8)
       slop (~> 3.4)
     rack (1.5.2)
+    rack-contrib (1.1.0)
+      rack (>= 0.9.1)
+    rack-rewrite (1.5.0)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.3)
       ffi (>= 0.5.0)
@@ -53,3 +56,6 @@ DEPENDENCIES
   guard
   guard-nanoc
   nanoc
+  rack
+  rack-contrib
+  rack-rewrite
