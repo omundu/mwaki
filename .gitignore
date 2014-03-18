@@ -1,1 +1,5 @@
-tmp/*
+tmp
+tmp/checksums
+tmp/compiled_content
+tmp/dependencies
+tmp/rule_memory
