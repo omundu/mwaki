@@ -50,6 +50,10 @@ a:hover {
   line-height: 20px;
 }
 
+#main p.centered {
+  text-align: center;
+}
+
 #main ul, #main ol {
   margin: 20px;
 }
