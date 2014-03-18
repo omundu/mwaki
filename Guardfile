@@ -1,6 +1,5 @@
 guard 'nanoc' do
-  watch(/^config.yaml\//)
-  watch(/^Rules\//)
-  watch(/^layouts\//)
-  watch(/^content\//)
+  watch('nanoc.yaml') # Change this to config.yaml if you use the old config file name
+  watch('Rules')
+  watch(%r{^(content|layouts|lib)/.*$})
 end
