@@ -1,44 +1,25 @@
-# Thank you Yann Esposito http://yannesposito.com/Scratch/en/blog/2010-08-23-Now-heberged-on-heroku/
-# Michael van Rooijen https://github.com/meskyanichi/nanoc-heroku
+require 'bundler/setup'
+require 'sinatra/base'
 
-use Rack::ETag
-module ::Rack
-  class TryStatic < Static
+# The project root directory
+$root = ::File.dirname(__FILE__)
 
-    def initialize(app, options)
-      super
-      @try = ([''] + Array(options.delete(:try)) + [''])
-    end
+class SinatraStaticServer < Sinatra::Base
 
-    def call(env)
-      @next = 0
-      while @next < @try.size && 404 == (resp = super(try_next(env)))[0]
-        @next += 1
-      end
-      404 == resp[0] ? @app.call : resp
-    end
-
-    private
-
-    def try_next(env)
-      env.merge('PATH_INFO' => env['PATH_INFO'] + @try[@next])
-    end
-
+  get(/.+/) do
+    send_sinatra_file(request.path) {404}
   end
+
+  not_found do
+    send_file(File.join(File.dirname(__FILE__), 'output', 'error', 'not_found', 'index.html'), {:status => 404})
+  end
+
+  def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'output',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+
 end
 
-use Rack::TryStatic,
-    :root => "output",
-    :urls => %w[/],
-    :try  => ['.html', 'index.html', '/index.html']
-
-errorFile = 'output/error/not_found/index.html'
-
-run lambda {
-  [404, {
-    "Last-Modified"  => File.mtime(errorFile).httpdate,
-    "Content-Type"   => "text/html",
-    "Content-Length" => File.size(errorFile).to_s
-    }, File.read(errorFile)
-  ]
-}
+run SinatraStaticServer
