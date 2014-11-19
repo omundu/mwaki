@@ -113,3 +113,13 @@ a:hover {
 
   line-height: 20px;
 }
+
+#footer {
+  padding: 30px;
+  
+  width: 100%;
+}
+
+#footer p {
+  text-align: center;
+}
